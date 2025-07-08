@@ -1,23 +1,17 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Admin\ProductController;
-
-Route::prefix('admin')->group(function () {
-    Route::resource('products', ProductController::class);
+// Ruta de prueba
+Route::get('/admin/test', function () {
+    return 'Test OK';
 });
 
-
-Route::get('/', function () {
-    return view('welcome');
+// Grupo admin con nombre de rutas
+Route::group([
+    'prefix' => 'admin',
+    'as'     => 'admin.',
+], function () {
+    // Controlador se pasa como 'Admin\ProductController'
+    Route::resource('products', 'Admin\ProductController');
 });

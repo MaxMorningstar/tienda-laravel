@@ -67,7 +67,7 @@
 <body>
     <h1>📦 Productos (Panel Admin)</h1>
 
-    <a class="btn" href="{{ route('products.create') }}">➕ Agregar nuevo producto</a>
+    <a class="btn" href="{{ route('admin.products.create') }}">➕ Agregar nuevo producto</a>
 
     <div class="container">
         @foreach ($products as $producto)
@@ -83,9 +83,9 @@
                 <p><strong>Stock:</strong> {{ $producto->stock }}</p>
 
                 <div class="actions">
-                    <a class="btn" href="{{ route('products.edit', $producto->id) }}">✏️ Editar</a>
+                    <a class="btn" href="{{ route('admin.products.edit', $producto->id) }}">✏️ Editar</a>
 
-                    <form action="{{ route('products.destroy', $producto->id) }}" method="POST" onsubmit="return confirm('¿Eliminar este producto?')">
+                    <form action="{{ route('admin.products.destroy', $producto->id) }}" method="POST" onsubmit="return confirm('¿Eliminar este producto?')">
                         @csrf
                         @method('DELETE')
                         <button class="btn delete" type="submit">🗑️ Eliminar</button>

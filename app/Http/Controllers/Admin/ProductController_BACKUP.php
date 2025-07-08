@@ -23,21 +23,21 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:100',
+            'name' => 'required|string|max:100',
             'description' => 'nullable|string',
-            'price'       => 'required|numeric|min:0',
-            'stock'       => 'required|integer|min:0',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('products', 'public');
+            $path = $request->file('image')->store('products', 'public');
+            $validated['image'] = $path;
         }
 
         Product::create($validated);
 
-        return redirect()->route('admin.products.index')
-                         ->with('success', 'Producto creado correctamente');
+        return redirect()->route('products.index')->with('success', 'Producto creado correctamente');
     }
 
     public function edit(Product $product)
@@ -48,37 +48,35 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:100',
+            'name' => 'required|string|max:100',
             'description' => 'nullable|string',
-            'price'       => 'required|numeric|min:0',
-            'stock'       => 'required|integer|min:0',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         if ($request->hasFile('image')) {
-            // elimina la imagen previa si existe
             if ($product->image && Storage::disk('public')->exists($product->image)) {
                 Storage::disk('public')->delete($product->image);
             }
-            $validated['image'] = $request->file('image')->store('products', 'public');
+
+            $path = $request->file('image')->store('products', 'public');
+            $validated['image'] = $path;
         }
 
         $product->update($validated);
 
-        return redirect()->route('admin.products.index')
-                         ->with('success', 'Producto actualizado correctamente');
+        return redirect()->route('products.index')->with('success', 'Producto actualizado correctamente');
     }
 
     public function destroy(Product $product)
     {
-        // elimina la imagen si existe
         if ($product->image && Storage::disk('public')->exists($product->image)) {
             Storage::disk('public')->delete($product->image);
         }
 
         $product->delete();
 
-        return redirect()->route('admin.products.index')
-                         ->with('success', 'Producto eliminado correctamente');
+        return redirect()->route('products.index')->with('success', 'Producto eliminado correctamente');
     }
 }
