@@ -20,25 +20,40 @@ class ProductController extends Controller
         return view('admin.products.create');
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name'        => 'required|string|max:100',
-            'description' => 'nullable|string',
-            'price'       => 'required|numeric|min:0',
-            'stock'       => 'required|integer|min:0',
-            'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+    
+ public function store(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:100',
+        'description' => 'nullable|string',
+        'price' => 'required|numeric|min:0',
+        'stock' => 'required|integer|min:0',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('products', 'public');
+    // Procesar imagen si existe
+    if ($request->hasFile('image') && $request->file('image')->isValid()) {
+        $filename = time() . '_' . $request->file('image')->getClientOriginalName();
+        $path = public_path('imagenes');
+
+        // Creamos la carpeta si no existe
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
         }
 
-        Product::create($validated);
-
-        return redirect()->route('admin.products.index')
-                         ->with('success', 'Producto creado correctamente');
+        $request->file('image')->move($path, $filename);
+        $validated['image'] = $filename;
     }
+
+    $product = Product::create($validated);
+
+    if (!$product) {
+        return back()->with('error', 'No se pudo guardar el producto.')->withInput();
+    }
+
+    return redirect()->route('admin.products.index')->with('success', 'Producto creado correctamente');
+}
+
 
     public function edit(Product $product)
     {

@@ -15,3 +15,9 @@ Route::group([
     // Controlador se pasa como 'Admin\ProductController'
     Route::resource('products', 'Admin\ProductController');
 });
+
+Route::view('/formtest', 'formtest');
+Route::post('/testupload', function (Illuminate\Http\Request $request) {
+    dd($request->file('image'));
+});
+

@@ -1,122 +1,126 @@
+<!-- resources/views/admin/products/create.blade.php -->
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Agregar Producto</title>
+    <title>Agregar producto</title>
+
+    <!-- Estilos Uiverse -->
     <style>
         body {
-            background-color: #f3f4f6;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: sans-serif;
+            background: #f1f5f9;
+            padding: 40px;
         }
 
-        .card {
-            background: white;
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            width: 500px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
-        .card h2 {
-            text-align: center;
-            margin-bottom: 20px;
+        .uiverse-input {
+            position: relative;
+            margin-bottom: 1.5rem;
         }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        textarea,
-        input[type="file"] {
+        .uiverse-input input,
+        .uiverse-input textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #cbd5e1;
+            border: 2px solid #ccc;
             border-radius: 8px;
-            background-color: #f9fafb;
-            font-size: 14px;
+            outline: none;
+            font-size: 16px;
+            background: #fff;
         }
 
-        textarea {
-            resize: vertical;
+        .uiverse-input label {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background: #fff;
+            padding: 0 6px;
+            font-size: 14px;
+            color: #555;
         }
 
         button {
-            background-color: #4f46e5;
-            color: white;
-            border: none;
-            padding: 12px 20px;
             width: 100%;
+            background: #10b981;
+            color: white;
+            padding: 10px;
             font-size: 16px;
+            border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
+            transition: background 0.3s ease;
         }
 
         button:hover {
-            background-color: #4338ca;
-        }
-
-        a.back {
-            display: inline-block;
-            margin-top: 10px;
-            color: #4f46e5;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        a.back:hover {
-            text-decoration: underline;
+            background: #059669;
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>Agregar Producto</h2>
+    <h1>Agregar nuevo producto</h1>
 
-        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-
-            <div class="form-group">
-                <label>Nombre del producto</label>
-                <input type="text" name="name" required>
-            </div>
-
-            <div class="form-group">
-                <label>Descripción</label>
-                <textarea name="description" rows="3"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Precio ($)</label>
-                <input type="number" name="price" step="0.01" required>
-            </div>
-
-            <div class="form-group">
-                <label>Stock disponible</label>
-                <input type="number" name="stock" required>
-            </div>
-
-            <div class="form-group">
-                <label>Imagen del producto</label>
-                <input type="file" name="image">
-            </div>
-
-            <button type="submit">Guardar producto</button>
-        </form>
-
-        <a class="back" href="{{ route('products.index') }}">← Volver al listado</a>
+        @if ($errors->any())
+    <div style="background: #fee2e2; color: #b91c1c; padding: 10px; margin-bottom: 20px; border-radius: 8px;">
+        <strong>¡Error!</strong>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
     </div>
+@endif
+
+
+    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <div class="uiverse-input">
+    <input type="text" name="name" id="name" value="{{ old('name') }}" required>
+    <label for="name">Nombre del producto</label>
+</div>
+
+
+        <div class="uiverse-input">
+    <textarea name="description" id="description" rows="3">{{ old('description') }}</textarea>
+    <label for="description">Descripción</label>
+</div>
+
+
+        <div class="uiverse-input">
+    <input type="number" name="price" id="price" value="{{ old('price') }}" min="0" step="0.01" required>
+    <label for="price">Precio</label>
+</div>
+
+
+        <div class="uiverse-input">
+    <input type="number" name="stock" id="stock" value="{{ old('stock') }}" min="0" required>
+    <label for="stock">Stock</label>
+</div>
+
+
+       <div class="uiverse-input" style="position: relative;">
+    <label for="image" style="display:block; margin-bottom: 6px; color: #555;">Subir imagen</label>
+    <input type="file" name="image" id="image" accept=".jpg,.jpeg,.png" required>
+</div>
+
+
+
+        <button type="submit">Agregar producto</button>
+    </form>
 </body>
 </html>
