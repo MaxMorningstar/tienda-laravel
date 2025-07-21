@@ -14,6 +14,7 @@ Route::group([
 ], function () {
     // Controlador se pasa como 'Admin\ProductController'
     Route::resource('products', 'Admin\ProductController');
+    Route::get('/admin/products/{product}', [ProductController::class, 'show'])->name('admin.products.show');
 });
 
 Route::view('/formtest', 'formtest');

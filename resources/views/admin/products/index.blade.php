@@ -39,6 +39,11 @@
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+
+        .card img:hover {
+            transform: scale(1.02);
         }
 
         .card h3 {
@@ -96,6 +101,11 @@
         .add-button:hover {
             background-color: #059669;
         }
+
+        .card a {
+            text-decoration: none;
+            color: inherit;
+        }
     </style>
 </head>
 <body>
@@ -106,13 +116,20 @@
     <div class="products-container">
         @forelse ($products as $product)
             <div class="card">
-                @if ($product->image)
-                    <img src="{{ asset('imagenes/' . $product->image) }}" alt="{{ $product->name }}">  
-                @else
-                    <img src="https://via.placeholder.com/300x180.png?text=Sin+imagen" alt="Sin imagen">
-                @endif
+                <a href="{{ route('admin.products.show', $product) }}">
+                    @if ($product->image)
+                        <img src="{{ asset('imagenes/' . $product->image) }}" alt="{{ $product->name }}">
+                    @else
+                        <img src="https://via.placeholder.com/300x180.png?text=Sin+imagen" alt="Sin imagen">
+                    @endif
+                </a>
 
-                <h3>{{ $product->name }}</h3>
+                <h3>
+                    <a href="{{ route('admin.products.show', $product) }}">
+                        {{ $product->name }}
+                    </a>
+                </h3>
+
                 <p>Precio: ${{ number_format($product->price, 2) }}</p>
                 <p>Stock: {{ $product->stock }}</p>
 
